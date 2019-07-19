@@ -27,7 +27,7 @@ data =        [[ 0, -1, -1,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0],   #
 R=np.matrix(data)
 
 #Creates same matrix as above, but only filled with null
-Q = np.matrix(np.zeros([len(data), len(data)])) 
+Q = np.matrix(np.zeros([len(data), len(data[0])])) 
 
 #Future actions matter (0 = 0 * maxValue in future, 1 = 1 * maxValue in future)
 gamma = 0.95 
