@@ -1,10 +1,13 @@
 #Shortest-Path-AI (based on Mk 5)
+#This Q-Learning AI is reward-based, meaning you give it/take away points depending on how well it does
+#It takes in the data-list/matrix and trains an AI to go to a specific spot
 
 import numpy as np
 
 #Matrix over all connected areas (0 means not a path, everything else is)
 #You can change the negatives to the distance, and the AI finds the shortest one
 #The one's with 100 lead to the correct area
+#X-axis corresponds to paths out of one area, and Y-axis to the are you're in
 areas = [       "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"]
 data =        [[ 0, -1, -1,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0],   #A
                [-1,  0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0],   #B
@@ -23,8 +26,11 @@ data =        [[ 0, -1, -1,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0],   #
                [ 0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0]    #O
                 ]
 
+#Set goalArea to the area you want the AI to go to, it should be the index of the column of the matrix 
+goalArea = 14
+
 #Sets the reward-matrix with its data
-R=np.matrix(data)
+R = np.matrix(data)
 
 #Creates same matrix as above, but only filled with null
 Q = np.matrix(np.zeros([len(data), len(data[0])])) 
@@ -70,7 +76,7 @@ update(initialState, action, gamma)
 #******************************TRAINING******************************
 
 
-for i in range(20000): #Range = amount of "episodes"
+for i in range(200000): #Range = amount of steps taken
     currentState = np.random.randint(0, int(Q.shape[0]))
     availableAct = availableActions(currentState)
     action = sampleNextAction(availableAct)
@@ -83,11 +89,13 @@ print(np.round((Q / np.max(Q) * 100), decimals= 2
 
 #******************************TESTING******************************
 
+
 #Set current state to starting postition for the test
 currentState = 3
 steps = [currentState]
 
-while currentState != 14:
+#You can change the number to the specific spot you want it to go to
+while currentState != goalArea:
     nextStepIndex = np.where(Q[currentState, ] == np.max(Q[currentState, ]))[1]
 
     if nextStepIndex.shape[0] > 1:
